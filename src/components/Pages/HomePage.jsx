@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import axios from "axios";
 import dropDown from "../../assets/img/svg/down-arrow.svg";
 import Header from "../Header";
@@ -15,37 +15,110 @@ import { useNavigate } from "react-router-dom";
 let BaseUrl = "http://64.226.102.92:8000/api/v1"
 
 function headerSection() {
-   const [button , setButto] = useState(0)
   const navigate = useNavigate()
-  const [searchValue, setSearchValue] = useState("");
-  const [freeChked, sedFreeCheked] = useState(false);
-  const [triallCheked, setTriallCheked] = useState(false);
-  const handleCheked = (cheked) => {};
+   const [button , setButto] = useState(0)
+  const [trail ,setTrail] = useState(true)
   const [data ,setData] = useState([])
+  const [free ,setFree] = useState(true)
 
+  const [zadacha ,setZadacha] = useState([])
+  const [title ,setTitle] = useState('')
+  const [open ,setOpen] = useState(false)
   const handeClick =(text)=>{
       navigate(`/Neytroitem/${text}`)    
   }
  useEffect(()=>{
    getData()
+   getZadacha()
  },[])
   const getData = ()=>{
-    axios.get(BaseUrl +'/neauralnetwork/list/').then((res)=>{
-      setData(res.data.results)
-      console.log(res.data.results)
+    axios.get(BaseUrl +'/neauralnetwork/list/popular/').then((res)=>{
+      setData(res.data)
+      console.log(res.data)
     }).catch((err)=>{
       console.log(err)
     })
   }
+  
   const handleChange =(e)=>{
-    axios.get(BaseUrl +'/neauralnetwork/list/' + `?title=${e.target.value}` , {
-      search:`${e.target.value}`,
-      limit:5
-    }).then((res)=>{
+    setTitle(e.target.value)
+    axios.get(BaseUrl +'/neauralnetwork/list/popular/' + `?title=${e.target.value}` ).then((res)=>{
       console.log(res.data)
+      setData(res.data)
+    }).catch((err)=>{ 
+      console.log(err)
+    })
+
+  }
+
+  const getZadacha = ()=>{
+    axios.get(BaseUrl + "/neauralnetwork/list/zadacha/").then((res)=>{
+      setZadacha(res.data.results)
+    }).catch((err)=>{
+      console.log(err)
     })
   }
 
+  const handleSelect =(e)=>{
+    console.log(e.target.value)
+    axios.get(BaseUrl + '/neauralnetwork/list/popular/' + `?zadacha=${e.target.value}`).then((res)=>{
+      console.log(res.data)
+      setData(res.data)
+    })
+  }
+  const handleOpen =()=>{
+    setOpen(!open)
+    if(open === true){
+    axios.get(BaseUrl + "/neauralnetwork/list/popular/" + `?limit=12`).then((res)=>{
+      setData(res.data)
+      console.log(res.data)
+    }).catch((err)=>{
+      console.log(err)
+    })
+    }
+    else{
+      axios.get(BaseUrl + '/neauralnetwork/list/popular/' ).then((res)=>{
+       setData(res.data)
+       console.log(res.data)
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }
+  }
+  const freeChange =()=>{
+    setFree(!free)
+    axios.get(BaseUrl + "/neauralnetwork/list/popular/" + `?free=${free}`).then((res)=>{
+       setData(res.data)
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
+  const trailChange =()=>{
+    setTrail(!trail)
+    axios.get(BaseUrl + '/neauralnetwork/list/popular/' + `?trail=${trail}`).then((res)=>{
+       setData(res.data)
+    })
+  }
+  const filtrType =(id)=>{
+    setButto(id)
+    if(id ===0){
+    
+      axios.get(BaseUrl +'/neauralnetwork/list/popular/').then((res)=>{
+        setData(res.data)
+        console.log(res.data)
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }
+    else(
+      axios.get(BaseUrl + '/neauralnetwork/list/popular/' +  `?tag=${id}`).then((res)=>{
+        setData(res.data)
+      }).catch((err)=>{
+        console.log(err)
+      })
+    )
+  }
+  
   return (
     <>
       <div className="sectionHome">
@@ -61,11 +134,11 @@ function headerSection() {
         </div>
         <div className=" container section__filter">
           <div className="filter__inner">
-            <button onClick={()=>setButto(0)} className= {button === 0 ? 'btn__filter active' :'btn__filter'}>Всем</button>
-            <button onClick={()=>setButto(1)} className= {button === 1 ? 'btn__filter active' :'btn__filter'}>Дизайнерам</button>
-            <button onClick={()=>setButto(2)} className= {button === 2 ? 'btn__filter active' :'btn__filter'}>Разработчикам</button>
-            <button onClick={()=>setButto(3)} className= {button === 3 ? 'btn__filter active' :'btn__filter'}>Копирайтерам</button>
-            <button onClick={()=>setButto(4)} className= {button === 4 ? 'btn__filter active' :'btn__filter'}>Для бизнеса</button>
+            <button onClick={()=>filtrType(0)} className= {button === 0 ? 'btn__filter active' :'btn__filter'}>Всем</button>
+            <button onClick={()=>filtrType(1)} className= {button === 1 ? 'btn__filter active' :'btn__filter'}>Дизайнерам</button>
+            <button onClick={()=>filtrType(2)} className= {button === 2 ? 'btn__filter active' :'btn__filter'}>Разработчикам</button>
+            <button onClick={()=>filtrType(3)} className= {button === 3 ? 'btn__filter active' :'btn__filter'}>Копирайтерам</button>
+            <button onClick={()=>filtrType(4)} className= {button === 4 ? 'btn__filter active' :'btn__filter'}>Для бизнеса</button>
           </div>
           <button className="dropDownBnt">
             <img className="" srcSet={dropDown} alt="" />
@@ -85,12 +158,18 @@ function headerSection() {
               <img srcSet={seorchIcon} alt="" />
             </div>
             <div className="wrapper__seorch--input">
-              <select className="tasks" name="tasks" id="tasks">
-                <option selected className="selected" value="1">
+              <select onChange={(e)=>handleSelect(e)} className="tasks" name="tasks" id="tasks">
+                <option selected className="selected" value="">
                   Задачи
                 </option>
-                <option value="2">2</option>
-                <option value="3">3</option>
+                {
+                  zadacha.map((item , index) =>(
+                    <option value={item.zadacha} key={index}>
+                      {item.zadacha}
+                    </option>
+                  ))
+                }
+               
               </select>
               <img srcSet={dropDownSelect} alt="" />
             </div>
@@ -98,8 +177,7 @@ function headerSection() {
               <div className="chekBox__inner">
                 <input
                   className="cheked"
-                  value={freeChked}
-                  onChange={() => handleCheked("free")}
+                  onChange={()=>freeChange()}
                   type="checkbox"
                   name=""
                   id=""
@@ -109,8 +187,7 @@ function headerSection() {
               <div className="chekBox__inner">
                 <input
                   className="cheked"
-                  value={triallCheked}
-                  onChange={() => handleCheked("triall")}
+                  onChange={()=>trailChange()}
                   type="checkbox"
                   name=""
                   id=""
@@ -122,7 +199,7 @@ function headerSection() {
           <p>Самые популярные нейросети</p>
           <div className="wrapper__oll--cartes">
              {
-              data.map((item, index) =>(
+              data?.map((item, index) =>(
                    <div  onClick={()=>handeClick(item.slug)} key={index} className="carts__warpper3">
                    <img  srcSet={item.image} alt="" />
          
@@ -154,10 +231,10 @@ function headerSection() {
           </div>
         </div>
       </div>
-      <div className="wrapper__showOll--carts">
-        <img src={homeImg} alt="" />
-        <button className="show__oll--cats">Смотреть все</button>
-        <img src={homeImg} alt=""  />
+      <div onClick={()=>handleOpen()} className="wrapper__showOll--carts">
+        <img className={open ? "trans" :''} src={homeImg} alt="" />
+        <button className="show__oll--cats">{open ? "Вверх" :'Смотреть все'}</button>
+        <img className={open ? 'trans' : ''} src={homeImg} alt=""  />
       </div>
       <Footer />
     </>

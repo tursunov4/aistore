@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import Header from "../Header";
-import EducationCart from "../EducationCart";
 import imgHeader from "../../assets/img/png/education__header.png";
 import hend from "../../assets/img/svg/hend.svg";
 import axios from "axios";
@@ -17,7 +16,7 @@ export default function Education() {
   axios.get(BaseUrl + "/education/list/").then((res)=>{
     setData(res.data.results)
     console.log(res.data.results)
-  }).then((res)=>{
+  }).catch((res)=>{
     console.log(res.data)
   })
  }
@@ -55,7 +54,8 @@ export default function Education() {
           </div>
         </div>
       </div>
-      <div className="wrapper__oll--cartes">
+     <div >
+     <div className="wrapper__oll--cartes">
         {
           data.map((item , index) =>(
 
@@ -101,6 +101,7 @@ export default function Education() {
           </p>
         </div>
       </div>
+     </div>
       <Footer />
     </>
   );

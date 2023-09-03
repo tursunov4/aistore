@@ -3,6 +3,7 @@ import Header from "../Header";
 import Footer from "../Footer";
 import axios from "axios";
 import hend from "../../assets/img/svg/hend.svg";
+import { useNavigate } from "react-router-dom";
 
 
 let BaseUrl = "http://64.226.102.92:8000/api/v1"
@@ -19,6 +20,7 @@ export default function Advertising() {
      console.log(err)
    })
   }
+  const navigate = useNavigate()
   return (
     <>
       <div className="page__Promty">
@@ -26,7 +28,7 @@ export default function Advertising() {
           <Header />
         </div>
         <div className="container">
-          <p className="navigation__strel">Главная -- Реклама</p>
+          <p className="navigation__strel"> <span onClick={()=>navigate('/')} className="cursor-span">Главная</span> -- <span className="active-span"> Реклама</span></p>
           <p className="name__Page">Реклама</p>
         </div>
       </div>

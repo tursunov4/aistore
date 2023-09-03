@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "../Header";
 import Footer from "../Footer";
-import Cartes from "../Cartes";
-import Pagination from "./Pagination";
+
 import axios from "axios";
 import seorchIcon from "../../assets/img/svg/seorchIcon.svg";
 import dropDownSelect from "../../assets/img/svg/down-arrow-select.svg";
@@ -12,32 +11,77 @@ import { useNavigate } from "react-router-dom";
 import clock from "../../assets/img/svg/time.svg";
 import free from "../../assets/img/svg/free.svg";
 import money from "../../assets/img/svg/flag.svg";
-let BaseUrl = "http://64.226.102.92:8000/api/v1"
 
+let BaseUrl = "http://64.226.102.92:8000/api/v1"
+import ReactPaginate from 'react-paginate';
 export default function NeuralNetwork() {
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [articlesPage, setArticlesPage] = useState(1);
-  const [articlesParPage] = useState(12);
-  const [searchValue, setSearchValue] = useState("");
-  const [freeChked, sedFreeCheked] = useState(false);
-  const [triallCheked, setTriallCheked] = useState(false);
+   
    const [data ,setData] = useState([])
-    const navigate = useNavigate()
+   const [zadacha ,setZadacha] = useState([])
+   const [select , setSelect] = useState('')
+   const [mapData , setMapData] = useState([])
+   const [free ,setFree] = useState(true)
+   const [trail ,setTrail] = useState(true)
+   const [currentPage, setCurrentPage] = useState(0);
+   const handlePageChange = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
+  };
+  const itemsPerPage = 12; // Number of items to display per page
+const startIndex = currentPage * itemsPerPage;
+const visibleItems = data.slice(startIndex, startIndex + itemsPerPage);
+  const navigate = useNavigate()
   useEffect(()=>{
     getData()
+    getZadacha()
   },[])  
    const getData =()=>{
-    axios.get(BaseUrl + "/neauralnetwork/list/").then((res)=>{
-      setData(res.data.results)
-      console.log(res.data.results)
-    }).then((res)=>{
+    axios.get(BaseUrl + "/neauralnetwork/list/" ).then((res)=>{
+      setData(res.data)
       console.log(res.data)
+    }).catch((err)=>{
+      console.log(err)
     })
    }
+   const handleChange =(e)=>{
+    
+    axios.get(BaseUrl +'/neauralnetwork/list/' + `?title=${e.target.value}` ).then((res)=>{
+      console.log(res.data)
+      setData(res.data)
+    }).catch((err)=>{ 
+      console.log(err)
+    })
+  }
+  const getZadacha =()=>{
+    axios.get(BaseUrl + "/neauralnetwork/list/zadacha/" ).then((res)=>{
+      setZadacha(res.data.results)
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
+  const handleSelect =(e) =>{
+    setSelect(e.target.value)
+    axios.get(BaseUrl + '/neauralnetwork/list/' + `?zadacha=${e.target.value}`).then((res)=>{
+      console.log(res.data)
+      setData(res.data)
+    })
+  }
+  const handleChacked =()=>{
+    setFree(!free)
+    axios.get(BaseUrl + "/neauralnetwork/list/" + `?free=${free}`).then((res)=>{
+       setData(res.data)
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
   const handeClick =(text) => {
     navigate(`/Neytroitem/${text}`)
   }
+ const trailChange =()=>{
+  setTrail(!trail)
+  axios.get(BaseUrl + "/neauralnetwork/list/" + `?trail=${trail}`).then((res)=>{
+    setData(res.data)
+  })
+ }
   return (
     <>
       <div className="page__Promty">
@@ -45,7 +89,7 @@ export default function NeuralNetwork() {
           <Header />
         </div>
         <div className="container ">
-          <p className="navigation__strel">Главная --Нейросетм</p>
+          <p className="navigation__strel"> <span onClick={()=>navigate('/')} className="cursor-span">Главная </span> - <span  className="active-span">Нейросетм</span></p>
           <p className="name__Page">Нейросети</p>
           <p></p>
         </div>
@@ -55,8 +99,8 @@ export default function NeuralNetwork() {
           <div className="seorch__cart">
             <div className="wrapper__seorch--input">
               <input
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
+              
+                onChange={(e)=>handleChange(e)}
                 className="seorch__cart--input"
                 type="text"
                 placeholder="Поиск нейросетей"
@@ -64,21 +108,23 @@ export default function NeuralNetwork() {
               <img srcSet={seorchIcon} alt="" />
             </div>
             <div className="wrapper__seorch--input">
-              <select className="tasks" name="tasks" id="tasks">
-                <option selected className="selected" value="1">
+              <select onChange={(e)=>handleSelect(e)} className="tasks" name="tasks" id="tasks">
+                <option selected className="selected" value="">
                   Задачи
                 </option>
-                <option value="2">2</option>
-                <option value="3">3</option>
+                 {
+                  zadacha.map((item , index) =>(
+                    <option key={index}>{item.zadacha}</option>
+                  ))
+                 }
               </select>
               <img srcSet={dropDownSelect} alt="" />
             </div>
             <div className="wrapper__chekBox">
               <div className="chekBox__inner">
                 <input
-                  className="cheked"
-                  value={freeChked}
-                  onChange={() => handleCheked("free")}
+                  className="cheked"          
+                  onChange={(e)=>handleChacked(e)}
                   type="checkbox"
                   name=""
                   id=""
@@ -87,9 +133,8 @@ export default function NeuralNetwork() {
               </div>
               <div className="chekBox__inner">
                 <input
-                  className="cheked"
-                  value={triallCheked}
-                  onChange={() => handleCheked("triall")}
+                  className="cheked"            
+                 onChange={()=>trailChange()}
                   type="checkbox"
                   name=""
                   id=""
@@ -101,7 +146,7 @@ export default function NeuralNetwork() {
           <p>Самые популярные нейросети</p>
           <div className="wrapper__oll--cartes">
           {
-            data.map((item , index)=>(
+            visibleItems?.map((item , index)=>(
               
              <div onClick={()=>handeClick(item.slug)} key={index} className="carts__warpper3">
              <img srcSet={item.image} alt="" />
@@ -131,14 +176,17 @@ export default function NeuralNetwork() {
           }
           
           </div>
+          <ReactPaginate
+      className='paginate'      
+      pageCount={Math.ceil(data.length / itemsPerPage)}
+      pageRangeDisplayed={2}
+      marginPagesDisplayed={1}
+      onPageChange={handlePageChange}
+      activeClassName={'active-paginate'}
+    />
+      
         </div>
       </div>
-
-      {/* <Pagination
-        articlesParPage={articlesParPage}
-        totalArticles={articles.length && articles.length}
-        paginate={paginate}
-      /> */}
       <Footer />
     </>
   );
