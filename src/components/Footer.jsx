@@ -1,28 +1,29 @@
 import React from "react";
 import logo from "../assets/img/svg/logo.svg";
 import telegram from "../assets/img/svg/telegram.svg";
+import { Link } from "react-router-dom";
 
 function footer() {
   return (
     <>
       <footer>
         <div className="container footer__inner">
-          <a href="#" className="logo">
+          <Link to={'/'} className="logo">
             <img src={logo} alt="logo" srcset="" />
-          </a>
+          </Link>
           <nav className="menu menu__footer">
             <ul className="menu__list">
               <li>
-                <a href="#">Нейросети</a>
+                <Link to={'/neyron'} >Нейросети</Link>
               </li>
               <li>
-                <a href="#">Промты</a>
+                <Link to={'/Promty'} >Промты</Link>
               </li>
               <li>
-                <a href="#">Обучение</a>
+                <Link to={'/Education'} >Обучение</Link>
               </li>
               <li>
-                <a href="#">Реклама</a>
+                <Link to={'/Advertising'}>Реклама</Link>
               </li>
             </ul>
           </nav>
