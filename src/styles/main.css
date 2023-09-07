@@ -1,4 +1,7 @@
 /* header styles */
+*{
+  scroll-behavior: smooth;
+}
 header {
   display: flex;
   align-items: center;
@@ -770,7 +773,7 @@ header {
   margin: 0 auto;
   padding: 0 15px;
 }
-.neyronitem__wrap > h2 {
+.neyronitem__wrap  h2 {
   color: #000;
   font-family: Montserrat;
   font-size: 48px;
@@ -784,8 +787,8 @@ header {
 }
 .neyronitem__wrap-item {
   display: flex;
-  justify-content: space-between;
-  gap: 15px;
+  justify-content: center;
+  gap: 70px;
   margin-bottom: 60px;
 }
 .neyronitem__wrap-item1 {
@@ -803,6 +806,7 @@ header {
   margin-bottom: 28px;
 }
 .neyronitem__btns > span {
+  
   cursor: pointer;
   padding: 7px 10px;
   color: #fff;
@@ -850,6 +854,8 @@ header {
   justify-content: center;
 }
 .neyronitem__reklamam {
+  overflow: hidden;
+  margin: 20px;
   width: 413px;
   height: 588px;
   flex-shrink: 0;
@@ -1186,7 +1192,7 @@ box-shadow: 4px 4px 6px 0px rgba(0, 0, 0, 0.15);
     width: 40px;
     height: 40px;
   }
-  .neyron-item__masange-wrap > img {
+  .neyron-item__masange-wrap  img {
     width: 126.149px;
     height: 40px;
   }
@@ -1203,7 +1209,7 @@ box-shadow: 4px 4px 6px 0px rgba(0, 0, 0, 0.15);
   }
 }
 @media only screen and (max-width: 420px) {
-  .neyronitem__wrap > h2 {
+  .neyronitem__wrap  h2 {
     color: #000;
     font-family: Montserrat;
     font-size: 18px;
@@ -1211,7 +1217,7 @@ box-shadow: 4px 4px 6px 0px rgba(0, 0, 0, 0.15);
     font-weight: 700;
     line-height: normal;
     text-align: start;
-    margin-left: 20px;
+    
   }
   .neyron-item__masange > h3 {
     color: #000;
@@ -1888,7 +1894,88 @@ margin: 20px 10px;
 
 }
 
+.dropDownBnt{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.section__inner {
+  margin-top: 96px;
+  text-align: center;
+  color: #fff;
+}
+ 
 
 
+.cartes__inner > p{
+  cursor: pointer;
+}
+@media only screen and (max-width:830px){
+  .section__inner {
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+  }
+}
+@media only screen and (max-width: 768px){
 
+.section__filter {
+    margin-top: 75px;
+}
+.dropDownBnt {
+  margin-top: 45px;
+}
 
+}
+@media only screen and (max-width:521px){
+  .page__Promty {
+    height: 210px;
+}
+.navigation__strel {
+
+  margin-bottom: 13px;
+  ;
+}
+}
+
+.neyro__reklamaimg{
+  width: 100%;
+  height: 100%;
+}
+.pagination__mid{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 20px;
+}
+.pagination__mid > span{
+  
+  color: #8E01BF;
+font-family: Montserrat;
+font-size: 16px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+border-radius: 4px;
+background: #FFF;
+padding: 8px 10px;
+
+}
+.pagination__mid > button{
+  color: #8E01BF;
+  display: block;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  border-radius: 4px;
+background: #FFF;
+height: 35px;
+cursor: pointer;
+}
+.pagination__mid > button > img{
+  width: 26px;
+}

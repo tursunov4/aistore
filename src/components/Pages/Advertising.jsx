@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import Header from "../Header";
 import Footer from "../Footer";
 import axios from "axios";
@@ -33,7 +33,7 @@ export default function Advertising() {
         </div>
       </div>
       <div className="wrapper__contact">
-        <div className="wrapper__inner">
+        <a  href="https://t.me/ai_store1" className="wrapper__inner">
           <p className="education__text">
             Если у вас есть продукт или услуга, которую можно продвигать через
             рекламу
@@ -46,7 +46,7 @@ export default function Advertising() {
               <img srcSet={hend} alt="" />
             </div>
           </div>
-        </div>
+        </a>
       </div>
       <div className="wrapper__oll--cartes">
         {

@@ -39,7 +39,7 @@ export default function Education() {
         </div>
       </div>
       <div className="wrapper__contact">
-        <div className="wrapper__inner">
+        <a href="https://t.me/ai_store1" className="wrapper__inner">
           <p className="education__text">
             Если у вас есть продукт или услуга, которую можно продвигать через
             рекламу
@@ -52,7 +52,7 @@ export default function Education() {
               <img srcSet={hend} alt="" />
             </div>
           </div>
-        </div>
+        </a>
       </div>
      <div >
      <div className="wrapper__oll--cartes">

@@ -3,7 +3,7 @@ import Header from "../Header"
 import Footer from "../Footer"
 import contat from '../../assets/img/png/contact.png'
 import telegram from '../../assets/img/png/telegram.png'
-import { useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import forAdults from "../../assets/img/svg/18+.svg";
 import rus from "../../assets/img/svg/ru.svg";
@@ -16,11 +16,15 @@ const Neyroitem = () => {
   const { text} = useParams()
   const [data , setData] = useState({})
   const [data2 ,setData2]= useState([])
+  const [reklama ,setReklama] = useState([])
   const [refresh ,setRefresh] = useState(false)
+  const url = window.location.href;
+  console.log(url , "url")
   const navigate = useNavigate()
   useEffect(()=>{
     getData()
     getData2()
+    getReklam()
   },[refresh])
 
   const getData =()=>{
@@ -43,6 +47,14 @@ const Neyroitem = () => {
     navigate(`/Neytroitem/${text}`)
     setRefresh(!refresh)
   }
+  const getReklam =()=>{
+    axios.get(BaseUrl + "/neauralnetwork/list/adversiment/").then((res)=>{
+      console.log(res.data , "rekalma")
+      setReklama(res.data)
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
   return (
     <div>
        
@@ -50,11 +62,11 @@ const Neyroitem = () => {
           <Header />
         </div>
         <section className="neyroitem-section">
-        <div className="container__hug">
+        <div className="container__hug2">
           <div className="neyronitem__wrap">
-            <h2>{data.title}</h2>
             <div className="neyronitem__wrap-item">
               <div className="neyronitem__wrap-item1">
+                   <h2>{data.title}</h2>
                 <img src={data.image} alt="" />
                 <div className="neyronitem__btns">
                   <span>{data.zadacha}</span>
@@ -72,14 +84,25 @@ const Neyroitem = () => {
                   </div>
               </div>
               <div className="neyronitem__reklamam">
-                <h3>здесь могла быть ваша реклама</h3>
+                {
+                  reklama.map((item , index) =>(
+
+                <a key={index} href={item.link}>
+                  <img className="neyro__reklamaimg" src={item.image} alt="" />
+                </a>
+                  ))
+                }
               </div>
             </div>
             <div className="neyron-item__masange">
               <h3>Поделиться в соц.сетях</h3>
               <div className="neyron-item__masange-wrap">
-                <img src={contat} alt="" />
+                 <a href={`https://vk.com/share.php?url=${url}&title=${data.title}`}>
+                 <img src={contat} alt="" />
+                 </a>
+                <a href={`https://telegram.me/share/url?url=${url}&text=${data.title}`}>
                 <img src={telegram} alt="" />
+                </a>
               </div>
             </div>
             <div className="neyron-item__masangerek">
@@ -91,7 +114,7 @@ const Neyroitem = () => {
                  {                    
                       data2.map((item , index)=>(
                         
-                       <div onClick={()=>handeClick(item.slug)} key={index} className="carts__warpper">
+                       <div onClick={()=>handeClick(item.slug)} key={index} className="carts__warpper3">
                        <img srcSet={item.image} alt="" />
              
                        <h1 className="name__Ai">{item.title}</h1>

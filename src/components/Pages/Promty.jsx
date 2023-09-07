@@ -1,32 +1,58 @@
-import React, { useState, useEffect } from "react";
-import { Link, Outlet,useNavigate,useParams } from "react-router-dom";
+import  { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Header from "../Header";
 import Footer from "../Footer";
 import seorchIcon from "../../assets/img/svg/seorchIcon.svg";
 import dropDownSelect from "../../assets/img/svg/down-arrow-select.svg";
 let BaseUrl = "http://64.226.102.92:8000/api/v1"
-import ReactPaginate from 'react-paginate';
+import prevv from '../../assets/img/svg/prev.svg'
+import nextt from '../../assets/img/svg/next.svg'
 function Promty() {
    const [data ,setData] = useState([])
    const [category ,setCategory] = useState([])
-   const [currentPage, setCurrentPage] = useState(0);
-   const handlePageChange = (selectedPage) => {
-    setCurrentPage(selectedPage.selected);
-  };
-  const itemsPerPage = 12; // Number of items to display per page
-const startIndex = currentPage * itemsPerPage;
-const visibleItems = data.slice(startIndex, startIndex + itemsPerPage);
+   const [next ,setNext] = useState('')
+   const [prev , setPrev] = useState('')
+   const [count , setCount] = useState(1)
    const navigate = useNavigate()
    useEffect(()=>{
      getData()
      getCategory()
    },[])
+   const prevClick=()=>{
+    if(prev){
+      axios.get(prev).then((res)=>{
+        console.log(res.data)
+        setData(res.data.results)
+        setNext(res.data.next)
+        setPrev(res.data.previous)
+        if(res.status === 200){
+          setCount(prev=> prev-1)
+        }
+      })
+    }
+   }
+   const nextClick=()=>{
+    if(next){
+      axios.get(next).then((res)=>{
+        console.log(res.data)
+        setData(res.data.results)
+        setNext(res.data.next)
+        setPrev(res.data.previous)
+        if(res.status === 200){
+          setCount(prev=> prev+1)
+        }
+      })
+    }
+   }
    
    const getData =()=>{
     axios.get(BaseUrl + "/promt/list/").then((res)=>{
       setData(res.data.results)
       console.log(res.data.results)
+      setNext(res.data.next)
+      setPrev(res.data.previous)
+      setCount(1)
     }).catch((err)=>{
       console.log(err)
     })
@@ -43,6 +69,9 @@ const visibleItems = data.slice(startIndex, startIndex + itemsPerPage);
   const handleChange =(e)=>{
     axios.get(BaseUrl + '/promt/list/' + `?title=${e.target.value}`).then((res)=>{
        setData(res.data.results)
+       setNext(res.data.next)
+       setPrev(res.data.previous)
+       setCount(1)
     }).catch((err)=>{
       console.log(err)
     })
@@ -50,6 +79,9 @@ const visibleItems = data.slice(startIndex, startIndex + itemsPerPage);
   const handleSelect =(e)=>{
     axios.get(BaseUrl + '/promt/list/' + `?category_name=${e.target.value}`).then((res)=>{
       setData(res.data.results)
+      setNext(res.data.next)
+      setPrev(res.data.previous)
+      setCount(1)
       console.log(res.data.results)
     }).catch((err)=>{
       console.log(err)
@@ -111,14 +143,15 @@ const visibleItems = data.slice(startIndex, startIndex + itemsPerPage);
           ))
         }
       </div>
-      <ReactPaginate
-      className='paginate'      
-      pageCount={Math.ceil(data.length / itemsPerPage)}
-      pageRangeDisplayed={2}
-      marginPagesDisplayed={1}
-      onPageChange={handlePageChange}
-      activeClassName={'active-paginate'}
-    />
+      <div className="pagination__mid">
+            <button onClick={()=>prevClick()}>
+              <img src={prevv} alt="" />
+            </button>
+             <span>{count}</span>
+             <button onClick={()=>nextClick()}>
+              <img src={nextt} alt="" />             
+             </button>
+           </div>
 
       <Footer />
     </>

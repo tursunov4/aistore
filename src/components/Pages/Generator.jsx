@@ -1,5 +1,3 @@
-
-
 import Header from "../Header"
 import Footer from "../Footer"
 import copy from '../../assets/img/svg/copy.svg'
@@ -16,6 +14,7 @@ const Generator = () => {
     const [refresh , setRefresh] = useState(false)
     const [ru ,setRu] = useState('')
     const [eng , setEng] = useState('')
+    const url = window.location.href;
     const navigate = useNavigate()
 
     useEffect(()=>{
@@ -91,8 +90,8 @@ const Generator = () => {
       <div className="neyron-item__masange">
               <h3>Поделиться в соц.сетях</h3>
               <div className="neyron-item__masange-wrap">
-                <img src={contat} alt="" />
-                <img src={telegram} alt="" />
+                <a href={`https://vk.com/share.php?url=${url}&title=${data.title}`}><img src={contat} alt="" /></a>
+                <a href={`https://telegram.me/share/url?url=${url}&text=${data.title}`} ><img src={telegram} alt="" /></a>
               </div>
       </div>
       <div className="drugiyi__promp">
